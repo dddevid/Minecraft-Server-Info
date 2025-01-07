@@ -7,49 +7,127 @@
     <title>Minecraft Server Info</title>
     <link id="favicon" rel="icon" href="https://via.placeholder.com/100" type="image/png">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #222, #333);
+            background: linear-gradient(135deg, #1a1f2c, #2d3436);
             margin: 0;
             padding: 0;
             color: #fff;
-            overflow-x: hidden;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         header {
-            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            font-size: 24px;
+            padding: 1.5rem;
+            position: relative;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             text-transform: uppercase;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
         }
 
         #search-section {
-            margin: 30px auto;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 12px;
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 16px;
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         #server-info {
-            margin: 20px auto;
+            width: 90%;
             max-width: 600px;
-            padding: 20px;
-            border-radius: 12px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 16px;
             display: none;
             opacity: 0;
             transform: scale(0.95);
-            transition: opacity 0.5s ease, transform 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #server-info.show {
@@ -58,50 +136,89 @@
             transform: scale(1);
         }
 
-        img {
-            border-radius: 20%;
-            max-width: 100px;
-            margin: 20px auto;
+        #server-name {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        #server-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            margin: 1.5rem auto;
             display: block;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
         }
 
-        input {
-            width: 70%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
+        #server-icon:hover {
+            transform: scale(1.05);
         }
 
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
         }
 
-        button:hover {
-            background-color: #3e8e41;
+        .info-label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .info-value {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .search-container {
+                flex-direction: column;
+            }
+
+            input, button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <header>Minecraft Server Info</header>
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">Minecraft Server Info</h1>
+        </div>
+    </header>
+    
     <div id="search-section">
-        <input type="text" id="server-ip" placeholder="Enter server IP" onkeydown="checkEnter(event)">
-        <button onclick="getServerInfo()">Search</button>
+        <div class="search-container">
+            <input type="text" id="server-ip" placeholder="Enter server IP address..." onkeydown="checkEnter(event)">
+            <button onclick="getServerInfo()">Search</button>
+        </div>
     </div>
+
     <div id="server-info">
         <h2 id="server-name"></h2>
         <img id="server-icon" src="" alt="Server Icon">
-        <p><strong>Players:</strong> <span id="server-players"></span></p>
-        <p><strong>Version:</strong> <span id="server-version"></span></p>
+        <div class="info-row">
+            <span class="info-label">Players:</span>
+            <span id="server-players" class="info-value"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Version:</span>
+            <span id="server-version" class="info-value"></span>
+        </div>
     </div>
+
     <script>
         function checkEnter(event) {
             if (event.key === 'Enter') {
@@ -146,16 +263,16 @@
 
                         if (palette) {
                             const gradient = `linear-gradient(135deg, 
-                                rgb(${palette[0].join(",")}), 
-                                rgb(${palette[1].join(",")}), 
-                                rgb(${palette[2].join(",")})
+                                rgba(${palette[0].join(",")}, 0.8), 
+                                rgba(${palette[1].join(",")}, 0.8), 
+                                rgba(${palette[2].join(",")}, 0.8)
                             )`;
 
                             document.body.style.background = gradient;
                         }
                     } catch (error) {
                         console.error("Color extraction failed:", error);
-                        document.body.style.background = "linear-gradient(135deg, #222, #333)";
+                        document.body.style.background = "linear-gradient(135deg, #1a1f2c, #2d3436)";
                     }
                 };
 
