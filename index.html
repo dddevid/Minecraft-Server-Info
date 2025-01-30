@@ -1,106 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.2/dist/full.css" rel="stylesheet">
     <title>Minecraft Server Info</title>
-    <link id="favicon" rel="icon" href="https://via.placeholder.com/100" type="image/png">
+    <link id="favicon" rel="icon" href="https://via.placeholder.com/100" type="image/png>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #222, #333);
-            margin: 0;
-            padding: 0;
-            color: #fff;
-            overflow-x: hidden;
-            min-height: 100vh;
+        .neon-text {
+            text-shadow: 0 0 10px #4f46e5,
+                         0 0 20px #4f46e5,
+                         0 0 30px #4f46e5;
+            animation: neonPulse 1.5s ease-in-out infinite alternate;
         }
 
-        header {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            font-size: 24px;
+        @keyframes neonPulse {
+            from {
+                text-shadow: 0 0 5px #4f46e5,
+                            0 0 10px #4f46e5;
+            }
+            to {
+                text-shadow: 0 0 15px #4f46e5,
+                            0 0 25px #4f46e5,
+                            0 0 35px #4f46e5;
+            }
+        }
+
+        .neon-card {
+            transition: transform 0.3s;
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d) padding-box,
+                        linear-gradient(45deg, #4f46e5, #ec4899) border-box;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .neon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
+        }
+
+        .neon-input {
+            background: rgba(17, 24, 39, 0.7) !important;
+            border: 1px solid #4f46e5 !important;
+            transition: all 0.3s ease;
+        }
+
+        .neon-input:focus {
+            box-shadow: 0 0 15px #4f46e5 !important;
+            border-color: #818cf8 !important;
+        }
+
+        .neon-button {
+            background: linear-gradient(45deg, #4f46e5, #ec4899) !important;
+            border: none !important;
             text-transform: uppercase;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 1px;
+            transition: all 0.3s ease !important;
         }
 
-        #search-section {
-            margin: 30px auto;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(12px);
+        .neon-button:hover {
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.5);
+            transform: scale(1.05);
         }
 
-        #server-info {
-            margin: 20px auto;
-            max-width: 600px;
-            padding: 20px;
-            border-radius: 12px;
-            display: none;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.5s ease, transform 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(15px);
+        .neon-avatar {
+            border: 2px solid #4f46e5;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+            transition: all 0.3s ease;
         }
 
-        #server-info.show {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        img {
-            border-radius: 20%;
-            max-width: 100px;
-            margin: 20px auto;
-            display: block;
-        }
-
-        input {
-            width: 70%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #3e8e41;
+        .neon-avatar:hover {
+            transform: rotate(5deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(79, 70, 229, 0.8);
         }
     </style>
 </head>
 <body>
-    <header>Minecraft Server Info</header>
-    <div id="search-section">
-        <input type="text" id="server-ip" placeholder="Enter server IP" onkeydown="checkEnter(event)">
-        <button onclick="getServerInfo()">Search</button>
-    </div>
-    <div id="server-info">
-        <h2 id="server-name"></h2>
-        <img id="server-icon" src="" alt="Server Icon">
-        <p><strong>Players:</strong> <span id="server-players"></span></p>
-        <p><strong>Version:</strong> <span id="server-version"></span></p>
+    <header class="p-8 mb-12 neon-text text-4xl font-bold text-center">
+        Minecraft Server Info
+    </header>
+    
+    <div class="container mx-auto px-4">
+        <div class="neon-card max-w-md mx-auto p-8 mb-8 rounded-2xl">
+            <input type="text" id="server-ip" 
+                   class="neon-input input input-lg w-full mb-4 text-white placeholder-opacity-70" 
+                   placeholder="Enter server IP" 
+                   onkeydown="checkEnter(event)">
+            <button onclick="getServerInfo()" 
+                    class="neon-button btn btn-lg w-full text-white font-bold">
+                Search Server
+            </button>
+        </div>
+
+        <div id="server-info" class="neon-card max-w-2xl mx-auto p-8 rounded-2xl opacity-0 scale-95 transition-all">
+            <h2 id="server-name" class="neon-text text-3xl mb-4 font-bold"></h2>
+            <img id="server-icon" class="neon-avatar w-32 h-32 mx-auto mb-6" src="" alt="Server Icon">
+            <div class="space-y-4 text-lg">
+                <p class="text-white/80"><strong class="text-indigo-400">Players:</strong> 
+                    <span id="server-players" class="text-emerald-400"></span>
+                </p>
+                <p class="text-white/80"><strong class="text-indigo-400">Version:</strong> 
+                    <span id="server-version" class="text-amber-400"></span>
+                </p>
+            </div>
+        </div>
     </div>
     <script>
         function checkEnter(event) {
